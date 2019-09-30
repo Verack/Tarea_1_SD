@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  server:
+    build:
+      context: ./servidor
+      dockerfile: Dockerfile
+    image: ubuntu
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/servidor
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.2
+
+  client:
+    depends_on:
+      - "server"
+    build:
+      context: ./cliente
+      dockerfile: Dockerfile
+    image: ubuntu
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/cliente
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.4
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

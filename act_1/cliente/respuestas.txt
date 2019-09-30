@@ -1,0 +1,2 @@
+Se ha conectado al servidor con el ip: 0.0.0.0 y puerto: 5000
+127.0.0.1 - Recibido
