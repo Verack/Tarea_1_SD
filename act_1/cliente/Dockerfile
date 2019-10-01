@@ -8,6 +8,7 @@ RUN apt-get update \
 	&& apt-get -y install python3-pip \
 	&& apt-get -y install nano
 
-WORKDIR /cliente
 
-COPY . ./
+ADD client.py /cliente/
+
+WORKDIR /cliente

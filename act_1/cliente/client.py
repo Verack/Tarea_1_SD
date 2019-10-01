@@ -34,4 +34,4 @@ class Client:
 		return s
 
 if __name__ == '__main__':
-	cliente = Client('',5000,"./respuestas.txt")
+	cliente = Client('server',5000,"./respuestas.txt")

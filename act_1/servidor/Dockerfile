@@ -8,6 +8,6 @@ RUN apt-get update \
 	&& apt-get -y install python3-pip \
 	&& apt-get -y install nano
 
-WORKDIR /servidor
+ADD server.py /servidor/
 
-COPY . ./
+WORKDIR /servidor

@@ -2,12 +2,8 @@ version: "3"
 
 services:
   server:
-    build:
-      context: ./servidor
-      dockerfile: Dockerfile
-    command:
-      python3 /cliente/client.py
-    image: ubuntu
+    build: servidor/
+    command: python3 servidor/server.py
     ports:
       - "5000:5000"
     volumes:
@@ -17,13 +13,8 @@ services:
   client:
     depends_on:
       - "server"
-    build:
-      context: ./cliente
-      dockerfile: Dockerfile
+    build: cliente/
     command:
-      python3 /servidor/server.py
-    image: ubuntu
-    ports:
-      - "5000:5000"
+      python3 cliente/client.py
     volumes:
       - .:/cliente
