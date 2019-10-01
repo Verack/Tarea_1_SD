@@ -1,6 +1,6 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from threading import Thread
- 
+
 class Client:
 	def __init__(self,ip,puerto,name):
 		self.s = self._start_sock(ip,puerto)
@@ -11,7 +11,7 @@ class Client:
 		thread.start()
 
 		while True:
-			
+
 			data = self.s.recv(4096)
 			if not data:
 				self.file.close()
@@ -34,4 +34,4 @@ class Client:
 		return s
 
 if __name__ == '__main__':
-	cliente = Client('0.0.0.0',5000,"./respuestas.txt")
+	cliente = Client('',5000,"./respuestas.txt")

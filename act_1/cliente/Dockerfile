@@ -1,4 +1,4 @@
-FROM ubuntu:latest 
+FROM ubuntu:latest
 
 RUN apt-get update \
 	&& apt-get -y install iputils-ping \
@@ -8,10 +8,6 @@ RUN apt-get update \
 	&& apt-get -y install python3-pip \
 	&& apt-get -y install nano
 
-WORKDIR /client
+WORKDIR /cliente
 
 COPY . ./
-
-RUN chmod +x ./run_client.sh
-
-ENTRYPOINT ./run_client.sh

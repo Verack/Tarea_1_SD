@@ -57,5 +57,5 @@ class Server:
 		return s
 
 if __name__ == '__main__':
-	server = Server('0.0.0.0',5000,"./log.txt")
-	server.run('0.0.0.0',5000)
+	server = Server('',5000,"./log.txt")
+	server.run('',5000)
