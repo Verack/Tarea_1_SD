@@ -24,6 +24,11 @@ while True:
 
     print ('received %s bytes from %s' % (len(data), address))
     print (data)
+    if len(data)>0:
+        file=open("data"+str(address[0])+".txt","a")
+        file.write(str(data))
+        file.close
+
 
     print ('sending acknowledgement to', address)
     sock.sendto(str.encode('ack'), address)

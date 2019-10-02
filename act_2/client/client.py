@@ -14,6 +14,7 @@ class Client:
 		while True:
 
 			data = self.s.recv(4096)
+			print(data)
 			if not data:
 				self.file.close()
 				break
@@ -24,7 +25,8 @@ class Client:
 
 	def send_message(self):
 		while True:
-			sleep(5)
+			print("envio de msg")
+			sleep(15)
 			user_message = "Mensaje del cliente :D"
 			self.s.send(user_message.encode("utf-8"))
 
@@ -36,4 +38,4 @@ class Client:
 		return s
 
 if __name__ == '__main__':
-	cliente = Client('headnode',5000,"./registro_cliente.txt")
+	cliente = Client('',5000,"./registro_cliente.txt")

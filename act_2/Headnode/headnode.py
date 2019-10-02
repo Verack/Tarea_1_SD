@@ -4,53 +4,70 @@ import sys
 import time
 from random import randint
 from concurrent.futures import ThreadPoolExecutor
-
+from queue import Queue
+from threading import Lock
 
 file_cliente = open("registro_server.txt","w")
 #file_server = #
-time.sleep(5)
-
 ##################VARIABLES GENERALES
 
 ip = ''
 puerto = 5000
-
+lock=Lock()
 
 ##################FUNCIONES
 def envio_msg(clientsocket, direc, sock):
+    global msgq
+    global datanodes
+
+    msgq=[]
+    datanodes=[]
     while True:
+
         data = clientsocket.recv(4096)
-
         IP = str(direc[0] + " - ").encode('utf-8')
-
+        lock.acquire()
         if not data:
             fail = str("No Recibido").encode('utf-8')
 
             clientsocket.send(IP + fail)
+            print("no")
 
         else:
+
             file_cliente.write(direc[0] + " - " + data.decode('utf-8'))
             file_cliente.write("\n")
             file_cliente.flush()
 
             lista = list(lista_datanodes_disponibles)
-            ind = randint(0,len(lista))
-            sock.send(data, lista[ind])
+
+            ind = randint(0,len(lista)-1)
+
+            datanodes.append(lista[ind])
+            print(data)
+            msgq.append(data)
             file_cliente.write("el mensaje del cliente "+direc[0]+" fue enviado al nodo "+str(lista[ind]))
+            print(direc[0], (lista[ind]))
             file_cliente.flush()
 
-            succ = str("Recibido").encode('utf-8')
+
+            succ = str("Recibido"+str(lista[ind])).encode('utf-8')
             clientsocket.send(IP + succ)
+
+        print("din")
+        lock.release()
 
 def multicaster(multicast_group, sock):
     global lista_datanodes_disponibles
+
     lista_datanodes_disponibles = set()
-    message = 'very important data'
+    message = ''
     # Send data to the multicast group
 
 
     # Look for responses from all recipients
     while True:
+        lock.acquire()
         print ('sending "%s"' % message)
         sent = sock.sendto(str.encode(message), multicast_group)
         print ('waiting to receive')
@@ -63,10 +80,20 @@ def multicaster(multicast_group, sock):
             file.flush()
         else:
             print ('received "%s" from %s' % (data, server))
+
             lista_datanodes_disponibles.add(server)
             file.write("conected "+str(server)+" \n")
             file.flush()
+        if len(msgq)>0:
+            print("passs")
+            print(datanodes[0])
+            sock.sendto(msgq[0],datanodes[0])
+            data, server = sock.recvfrom(16)
+            msgq.remove(msgq[0])
+            datanodes.remove(datanodes[0])
+
         file.close
+        lock.release()
         time.sleep(5)
 
 
@@ -107,17 +134,12 @@ with ThreadPoolExecutor() as executor:
         #Se acepta la conexion entrante
         clientsocket, direc = s.accept()
 
-        print(f"Conneccion con {direc} ha sido establecida")
+        print("Conneccion con {direc} ha sido establecida")
 
         #Se envia el mensaje
         clientsocket.send(bytes("Se ha conectado al servidor con el ip: "+str(ip)+" y puerto: "+str(puerto),"utf-8"))
 
         conexiones.append(clientsocket)
 
-        executor.submit(envio_msg, clientsocket, direc)
-        executor.submit(multicaster, multicast_group, sock)
-
-
-
-
-
+        executor.submit(envio_msg, clientsocket, direc,sock,)
+        executor.submit(multicaster, multicast_group, sock,)
