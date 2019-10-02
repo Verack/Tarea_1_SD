@@ -1,0 +1,55 @@
+
+version: "3"
+
+
+services:
+
+
+  headnode:
+
+    build: Headnode/
+
+    command: python3 Headnode/headnode.py
+
+    ports:
+      - 5000:5000
+
+    volumes:
+      - .:/Headnode
+
+  datanode1:
+    build: Datanode/
+
+    command: python3 Datanode/datanode.py
+
+    volumes:
+      - .:/Datanode
+
+  datanode2:
+    build: Datanode/
+
+    command: python3 Datanode/datanode.py
+
+    volumes:
+      - .:/Datanode
+
+  datanode3:
+    build: Datanode/
+
+    command: python3 Datanode/datanode.py
+
+    volumes:
+      - .:/Datanode
+
+
+  client:
+    depends_on:
+      - "headnode"
+
+    build: client/
+
+    command:
+      python3 client/client.py
+
+    volumes:
+      - .:/client
