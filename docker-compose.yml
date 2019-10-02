@@ -1,0 +1,28 @@
+
+version: "3"
+
+
+services:
+
+
+  headnode:
+
+    build: Headnode/
+
+    command: python3 headnode.py
+
+    ports:
+      - 5000:5000
+
+  datanode1:
+    build: Datanode/
+
+    command: python3 datanode.py
+  datanode2:
+    build: Datanode/
+
+    command: python3 datanode.py
+  datanode3:
+    build: Datanode/
+
+    command: python3 datanode.py
