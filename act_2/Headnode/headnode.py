@@ -85,6 +85,11 @@ def multicaster(multicast_group, sock):
             sock.sendto(msgq[0],datanodes[0])
             data, server = sock.recvfrom(16)
             print("Mensaje del cliente almacenado en el datanode "+str(datanodes[0]))
+            
+            file=open("data"+ str(datanodes[0])+".txt","a")
+            file.write(str(msgq[0])+" \n")
+            file.close
+            
             msgq.remove(msgq[0])
             datanodes.remove(datanodes[0])
 
