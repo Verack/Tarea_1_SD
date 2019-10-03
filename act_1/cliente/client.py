@@ -24,6 +24,7 @@ class Client:
 	def send_message(self):
 		while True:
 			user_message = "Mensaje del cliente UwU"
+			sleep(15)
 			self.s.send(user_message.encode("utf-8"))
 
 
