@@ -1,1 +1,0 @@
-Se ha conectado al servidor con el ip:  y puerto: 5000
