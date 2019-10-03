@@ -19,10 +19,6 @@ while True:
     data, address = sock.recvfrom(1024)
 
     print ('Recibido el mensaje %s desde %s' % (data, address))
-    if len(data)>0:
-        file=open("data"+ str(address[0])+".txt","a")
-        file.write(str(data)+" \n")
-        file.close
 
 
     print ('Mandando respuesta al Heartnode', address)
