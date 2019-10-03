@@ -25,7 +25,7 @@ class Client:
 
 	def send_message(self):
 		while True:
-			print("envio de msg")
+			print("Envio de mensaje al Heartnode")
 			sleep(15)
 			user_message = "Mensaje del cliente :D"
 			self.s.send(user_message.encode("utf-8"))
@@ -38,4 +38,4 @@ class Client:
 		return s
 
 if __name__ == '__main__':
-	cliente = Client('',5000,"./registro_cliente.txt")
+	cliente = Client('headnode',5000,"./registro_cliente.txt")

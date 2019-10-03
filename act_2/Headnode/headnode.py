@@ -44,17 +44,14 @@ def envio_msg(clientsocket, direc, sock):
             ind = randint(0,len(lista)-1)
 
             datanodes.append(lista[ind])
-            print(data)
             msgq.append(data)
-            file_cliente.write("el mensaje del cliente "+direc[0]+" fue enviado al nodo "+str(lista[ind]))
-            print(direc[0], (lista[ind]))
+            file_cliente.write("El mensaje del cliente "+direc[0]+" fue enviado al nodo "+str(lista[ind])+" \n")
+
             file_cliente.flush()
 
 
             succ = str("Recibido"+str(lista[ind])).encode('utf-8')
             clientsocket.send(IP + succ)
-
-        print("din")
         lock.release()
 
 def multicaster(multicast_group, sock):
@@ -62,33 +59,32 @@ def multicaster(multicast_group, sock):
 
     lista_datanodes_disponibles = set()
     message = ''
-    # Send data to the multicast group
 
 
-    # Look for responses from all recipients
+    #Envio de mensajes multicast
     while True:
         lock.acquire()
-        print ('sending "%s"' % message)
+        print ('Enviando... "%s"' % message)
         sent = sock.sendto(str.encode(message), multicast_group)
-        print ('waiting to receive')
+        print ('En espera de respuesta')
         file = open("hearbeat_server.txt","a")
         try:
             data, server = sock.recvfrom(16)
         except socket.timeout:
-            print ('timed out, no more responses')
-            file.write("no response \n")
+            print ('Time out, no hubo respuesta del datanode')
+            file.write("El datanode no responde \n")
             file.flush()
         else:
-            print ('received "%s" from %s' % (data, server))
+            print ('Respuesta "%s" del datanode %s' % (data, server))
 
             lista_datanodes_disponibles.add(server)
-            file.write("conected "+str(server)+" \n")
+            file.write("Conexion con el datanode "+str(server)+" \n")
             file.flush()
+        #En caso de que el cliente envie un mensaje, este se envia a un datanode.
         if len(msgq)>0:
-            print("passs")
-            print(datanodes[0])
             sock.sendto(msgq[0],datanodes[0])
             data, server = sock.recvfrom(16)
+            print("Mensaje del cliente almacenado en el datanode "+str(datanodes[0]))
             msgq.remove(msgq[0])
             datanodes.remove(datanodes[0])
 
@@ -102,15 +98,11 @@ def multicaster(multicast_group, sock):
 
 multicast_group = ('224.3.29.71', 10000)
 
-# Create the datagram socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# Set a timeout so the socket does not block indefinitely when trying
-# to receive data.
+#Time out de respuesta de los Datanodes
 sock.settimeout(0.2)
 
-# Set the time-to-live for messages to 1 so they do not go past the
-# local network segment.
 ttl = struct.pack('b', 1)
 sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
 

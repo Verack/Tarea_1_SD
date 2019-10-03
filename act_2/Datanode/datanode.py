@@ -19,16 +19,15 @@ sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
 # Receive/respond loop
 while True:
-    print ('\nwaiting to receive message')
+    print ('\nEsperando recibir mensajes')
     data, address = sock.recvfrom(1024)
 
-    print ('received %s bytes from %s' % (len(data), address))
-    print (data)
+    print ('Recibido el mensaje %s desde %s' % (data, address))
     if len(data)>0:
-        file=open("data"+str(address[0])+".txt","a")
-        file.write(str(data))
+        file=open("data"+ str(address[0])+".txt","a")
+        file.write(str(data)+" \n")
         file.close
 
 
-    print ('sending acknowledgement to', address)
-    sock.sendto(str.encode('ack'), address)
+    print ('Mandando respuesta al Heartnode', address)
+    sock.sendto(str.encode('Recibido'), address)
