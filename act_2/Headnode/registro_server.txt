@@ -1,6 +1,0 @@
-127.0.0.1 - Mensaje del cliente :D
-El mensaje del cliente 127.0.0.1 fue enviado al nodo ('192.168.43.29', 10000) 
-127.0.0.1 - Mensaje del cliente :D
-El mensaje del cliente 127.0.0.1 fue enviado al nodo ('192.168.43.29', 10000) 
-127.0.0.1 - Mensaje del cliente :D
-El mensaje del cliente 127.0.0.1 fue enviado al nodo ('192.168.43.29', 10000) 
